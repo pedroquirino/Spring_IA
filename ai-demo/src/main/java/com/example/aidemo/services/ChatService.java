@@ -1,4 +1,4 @@
-package com.example.aidemo.service;
+package com.example.aidemo.services;
 
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.stereotype.Service;

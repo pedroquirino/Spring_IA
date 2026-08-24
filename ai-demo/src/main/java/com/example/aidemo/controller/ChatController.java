@@ -1,6 +1,6 @@
-package com.example.ai
+package com.example.aidemo.controller;
 
-import com.example.aidemo.service.ChatService;
+import com.example.aidemo.services.ChatService;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -15,7 +15,6 @@ public class ChatController {
 
     @GetMapping
     public String chat(@RequestParam String message) {
-        message = "Teste, retorne 1 + 1";
         return chatService.chat(message);
     }
 }

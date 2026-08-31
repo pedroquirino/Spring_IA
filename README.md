@@ -47,34 +47,34 @@ Referência dos padrões utilizados como base conceitual: [Spring AI — Design 
 
 ```
 ┌─────────────────────────────────────────────────────────┐
-│                      GUI (Java Swing/AWT)                │
-│                     Padrão: Composite                    │
-└───────────────────────────┬───────────────────────────────┘
+│                      GUI (Java Swing/AWT)               │
+│                     Padrão: Composite                   │
+└───────────────────────────┬─────────────────────────────┘
                             │
                  Requisição do usuário
                             │
                             ▼
 ┌─────────────────────────────────────────────────────────┐
-│                  Strategy (Planejamento)                 │
-│   ReActPlanner | PlanThenExecutePlanner | HITL Planner    │
-└───────────────────────────┬───────────────────────────────┘
+│                  Strategy (Planejamento)                │
+│   ReActPlanner | PlanThenExecutePlanner | HITL Planner  │
+└───────────────────────────┬─────────────────────────────┘
                             │
                             ▼
 ┌─────────────────────────────────────────────────────────┐
-│                  State (Máquina de Estados)               │
-│         Controla o ciclo de vida da execução do agente    │
-└───────────────────────────┬───────────────────────────────┘
+│               State (Máquina de Estados)                │
+│       Controla o ciclo de vida da execução do agente    │
+└───────────────────────────┬─────────────────────────────┘
                             │
                             ▼
 ┌─────────────────────────────────────────────────────────┐
-│                Command (Execução de Ferramentas)          │
-│           Encapsula chamadas às tools do agente            │
-└───────────────────────────┬───────────────────────────────┘
+│              Command (Execução de Ferramentas)          │
+│            Encapsula chamadas às tools do agente        │
+└───────────────────────────┬─────────────────────────────┘
                             │
                             ▼
 ┌─────────────────────────────────────────────────────────┐
-│               Observer (Monitoramento de Execução)        │
-│           Valida sucesso/falha e notifica interessados     │
+│             Observer (Monitoramento de Execução)        │
+│        Valida sucesso/falha e notifica interessados     │
 └─────────────────────────────────────────────────────────┘
 ```
 
@@ -129,9 +129,10 @@ ollama serve
 
 | Nome | Função/Contribuição |
 |------|----------------------|
-| — | — |
-| — | — |
-| — | — |
+| Giovanna Marques | — |
+| João Pedro Menegasso | — |
+| José Wesley | — |
+| Pedro Henrique Quirino | — |
 
 <br>
 

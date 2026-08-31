@@ -3,30 +3,31 @@
 # Knowledge Assistant
 ### Agente de Base de Conhecimento com Spring AI
 
-*Projeto acadêmico da disciplina* **Padrões de Projetos de Sistemas**
-*Professor* **Giuliano Araújo Bertoti**
+**Fatec Professor Jessen Vidal**
+*Disciplina:* **Padrões de Projetos de Sistemas**
+*Professor:* **Giuliano Araújo Bertoti**
 
 [![My Skills](https://skillicons.dev/icons?i=java,spring,maven)](https://skillicons.dev)
 
-![Status](https://img.shields.io/badge/STATUS-EM%20DESENVOLVIMENTO-fbbf24?style=for-the-badge&labelColor=1e293b)
-![Java](https://img.shields.io/badge/JAVA-17%2B-f97316?style=for-the-badge&labelColor=1e293b)
-![License](https://img.shields.io/badge/USO-ACAD%C3%8AMICO-64748b?style=for-the-badge&labelColor=1e293b)
+![Status](https://img.shields.io/badge/STATUS-EM%20DESENVOLVIMENTO-fbbf24?style=for-the-badge&labelColor=1e1b2e)
+![Java](https://img.shields.io/badge/JAVA-17%2B-f97316?style=for-the-badge&labelColor=1e1b2e)
+![License](https://img.shields.io/badge/USO-ACAD%C3%8AMICO-64748b?style=for-the-badge&labelColor=1e1b2e)
 
 </div>
 
 <br>
 
-![](https://img.shields.io/badge/-SOBRE_O_PROJETO-8b5cf6?style=for-the-badge&labelColor=0f172a)
+## ![](https://img.shields.io/badge/-%20-a855f7?style=for-the-badge) Sobre o Projeto
 
 Este repositório contém a implementação de um **Agente de Base de Conhecimento (Knowledge Assistant)**, desenvolvido com **Spring AI** e modelos de IA totalmente **open-source**. O objetivo é construir um agente capaz de receber requisições do usuário, planejar suas ações, executar ferramentas (*tools*) e validar os resultados obtidos — tudo utilizando um modelo de linguagem aberto rodando localmente.
 
-O tema escolhido faz parte do catálogo de casos de uso de agentes empresariais descrito em [Spring AI — Enterprise Agent Use Cases](https://springdevpro.com/spring-ai/source-code/agent/#enterprise-agent-use-cases), com base na categoria **Knowledge Assistants**.
+O projeto é desenvolvido na **Fatec Professor Jessen Vidal**, como trabalho em grupo da disciplina **Padrões de Projetos de Sistemas**, ministrada pelo professor **Giuliano Araújo Bertoti**.
 
-Este projeto foi validado com o professor da disciplina conforme orientação da atividade.
+O tema escolhido faz parte do catálogo de casos de uso de agentes empresariais descrito em [Spring AI — Enterprise Agent Use Cases](https://springdevpro.com/spring-ai/source-code/agent/#enterprise-agent-use-cases), com base na categoria **Knowledge Assistants**. Este projeto foi validado com o professor da disciplina conforme orientação da atividade.
 
 <br>
 
-![](https://img.shields.io/badge/-OBJETIVO_ACAD%C3%8AMICO-8b5cf6?style=for-the-badge&labelColor=0f172a)
+## ![](https://img.shields.io/badge/-%20-a855f7?style=for-the-badge) Objetivo Acadêmico
 
 Implementar, na arquitetura do agente, os seguintes **padrões de projeto** (design patterns), documentados também via **diagramas UML**:
 
@@ -42,7 +43,7 @@ Referência dos padrões utilizados como base conceitual: [Spring AI — Design 
 
 <br>
 
-![](https://img.shields.io/badge/-ARQUITETURA-8b5cf6?style=for-the-badge&labelColor=0f172a)
+## ![](https://img.shields.io/badge/-%20-a855f7?style=for-the-badge) Arquitetura
 
 ```
 ┌─────────────────────────────────────────────────────────┐
@@ -81,7 +82,7 @@ Referência dos padrões utilizados como base conceitual: [Spring AI — Design 
 
 <br>
 
-![](https://img.shields.io/badge/-STACK_TECNOL%C3%93GICA-8b5cf6?style=for-the-badge&labelColor=0f172a)
+## ![](https://img.shields.io/badge/-%20-a855f7?style=for-the-badge) Stack Tecnológica
 
 [![My Skills](https://skillicons.dev/icons?i=java,spring,maven,gradle)](https://skillicons.dev)
 
@@ -95,7 +96,7 @@ Referência dos padrões utilizados como base conceitual: [Spring AI — Design 
 
 <br>
 
-![](https://img.shields.io/badge/-COMO_EXECUTAR-8b5cf6?style=for-the-badge&labelColor=0f172a)
+## ![](https://img.shields.io/badge/-%20-a855f7?style=for-the-badge) Como Executar
 
 ```bash
 # 1. Clone o repositório
@@ -116,7 +117,7 @@ ollama serve
 
 <br>
 
-![](https://img.shields.io/badge/-ENTREGAS-8b5cf6?style=for-the-badge&labelColor=0f172a)
+## ![](https://img.shields.io/badge/-%20-a855f7?style=for-the-badge) Entregas
 
 | Entrega | Data | Expectativa |
 |---------|------|-------------|
@@ -124,7 +125,7 @@ ollama serve
 
 <br>
 
-![](https://img.shields.io/badge/-EQUIPE-8b5cf6?style=for-the-badge&labelColor=0f172a)
+## ![](https://img.shields.io/badge/-%20-a855f7?style=for-the-badge) Equipe
 
 | Nome | Função/Contribuição |
 |------|----------------------|
@@ -134,7 +135,7 @@ ollama serve
 
 <br>
 
-![](https://img.shields.io/badge/-REFER%C3%8ANCIAS-8b5cf6?style=for-the-badge&labelColor=0f172a)
+## ![](https://img.shields.io/badge/-%20-a855f7?style=for-the-badge) Referências
 
 - [Spring AI — Enterprise Agent Use Cases](https://springdevpro.com/spring-ai/source-code/agent/#enterprise-agent-use-cases)
 - [Spring AI — Design Patterns Used](https://springdevpro.com/spring-ai/source-code/agent/#design-patterns-used)
@@ -144,6 +145,6 @@ ollama serve
 
 <br>
 
-![](https://img.shields.io/badge/-LICEN%C3%87A-8b5cf6?style=for-the-badge&labelColor=0f172a)
+## ![](https://img.shields.io/badge/-%20-a855f7?style=for-the-badge) Licença
 
-Projeto acadêmico desenvolvido para fins educacionais na disciplina de Padrões de Projetos de Sistemas.
+Projeto acadêmico desenvolvido para fins educacionais na disciplina de Padrões de Projetos de Sistemas, na Fatec Professor Jessen Vidal.

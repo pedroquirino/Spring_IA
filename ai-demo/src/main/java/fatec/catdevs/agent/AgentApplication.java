@@ -1,13 +1,12 @@
-package com.example.aidemo;
+package fatec.catdevs.agent;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class AiDemoApplication {
+public class AgentApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(AiDemoApplication.class, args);
+		SpringApplication.run(AgentApplication.class, args);
 	}
-
 }

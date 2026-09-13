@@ -1,14 +1,14 @@
-package com.example.aidemo.services;
+package fatec.catdevs.agent.service;
 
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ChatService {
+public class AgentService {
 
     private final ChatClient chatClient;
 
-    public ChatService(ChatClient.Builder builder) {
+    public AgentService(ChatClient.Builder builder) {
         this.chatClient = builder.build();
     }
 

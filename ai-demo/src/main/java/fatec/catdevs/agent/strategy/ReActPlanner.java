@@ -1,29 +1,43 @@
 package fatec.catdevs.agent.strategy;
 
 import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.stereotype.Component;
 
+@Component
 public class ReActPlanner implements PlanningStrategy {
 
     private final ChatClient chatClient;
 
-    public ReActPlanner(ChatClient chatClient) {
-        this.chatClient = chatClient;
+    public ReActPlanner(ChatClient.Builder builder) {
+         this.chatClient = builder.build();
     }
 
     @Override
     public String createPlan(String userMessage) {
         return chatClient.prompt()
                 .system("""
-                        Você é um agente de conhecimentos atue como um assistente de pesquisa (jurídico, médico, financeiro).
-                        Analise a solicitação do usuário e crie
-                        um plano simples para resolver o problema.
-                        O plano deve conter etapas numeradas.
-                        Não execute a tarefa ainda.
-                        Apenas apresente o plano.
-                        Divida perguntas complexas em partes.
-                        O planejamento para as resposta devem envolver a decomposição de consultas e síntese de resultados.
-                        Use só o contexto fornecido, nunca invente dados ou citações.
-                        Para todas as solicações inclua as fontes e links das pesquisas.
+                         Você é o PLANEJADOR de um agente.
+
+                        Sua única função é transformar a solicitação do usuário
+                        em um plano de execução.
+
+                        REGRAS:
+                        - NÃO responda à solicitação.
+                        - NÃO faça perguntas ao usuário.
+                        - NÃO dê opiniões.
+                        - NÃO execute nenhuma etapa.
+                        - NÃO explique suas decisões.
+                        - NÃO fale sobre "cliente".
+                        - Retorne SOMENTE uma lista numerada de etapas.
+
+                        Exemplo:
+
+                        1. Identificar o objetivo da solicitação.
+                        2. Levantar as informações necessárias.
+                        3. Analisar as informações.
+                        4. Produzir a resposta final.
+
+                        Solicitação:
                         """)
                 .user(userMessage)
                 .call()

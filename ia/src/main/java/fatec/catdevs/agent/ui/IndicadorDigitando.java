@@ -13,7 +13,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
-public class IndicadorDigitando extends JPanel {
+/** Leaf do padrão Composite: indicador de "digitando", sem filhos. */
+public class IndicadorDigitando extends JPanel implements ComponenteChat {
 
     private final Pontos pontos = new Pontos();
     private final JLabel tempo = new JLabel("0,0s");
@@ -31,6 +32,16 @@ public class IndicadorDigitando extends JPanel {
         balao.add(pontos, BorderLayout.WEST);
         balao.add(tempo, BorderLayout.EAST);
         add(balao);
+    }
+
+    @Override
+    public JComponent getView() {
+        return this;
+    }
+
+    @Override
+    public String getTexto() {
+        return "";
     }
 
     public void iniciar() {

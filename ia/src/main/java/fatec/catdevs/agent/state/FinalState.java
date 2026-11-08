@@ -1,16 +1,19 @@
-package fatec.catdevs.agent.strategy;
+package fatec.catdevs.agent.state;
 
 import org.springframework.stereotype.Component;
 
-import fatec.catdevs.agent.state.AgentContext;
-import fatec.catdevs.agent.state.AgentState;
-
+/** ConcreteState final: encerra o ciclo do agente. */
 @Component
 public class FinalState implements AgentState {
 
     @Override
     public void handle(AgentContext context) {
-        System.out.println(">>> ENTROU NO FINAL");
+        // nada a fazer: o ciclo termina aqui
+    }
+
+    @Override
+    public String name() {
+        return "Concluído";
     }
 
     @Override

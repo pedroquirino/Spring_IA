@@ -5,16 +5,23 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
-public class BolhaMensagem extends JPanel {
+/** Leaf do padrão Composite: uma mensagem, sem filhos. */
+public class BolhaMensagem extends JPanel implements ComponenteChat {
 
     private static final int LARGURA_MAXIMA = 320;
 
+    private final String texto;
+    private final boolean doUsuario;
+
     public BolhaMensagem(String texto, boolean doUsuario, String rodape) {
         super(new FlowLayout(doUsuario ? FlowLayout.RIGHT : FlowLayout.LEFT, 12, 4));
+        this.texto = texto;
+        this.doUsuario = doUsuario;
         setOpaque(false);
 
         Balao balao = new Balao(
@@ -31,6 +38,16 @@ public class BolhaMensagem extends JPanel {
         }
 
         add(balao);
+    }
+
+    @Override
+    public JComponent getView() {
+        return this;
+    }
+
+    @Override
+    public String getTexto() {
+        return (doUsuario ? "Você: " : "Agente: ") + texto;
     }
 
     private JTextArea criarTexto(String texto) {

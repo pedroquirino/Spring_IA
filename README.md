@@ -86,7 +86,7 @@ Referência dos padrões utilizados como base conceitual: [Spring AI — Design 
 
 [![My Skills](https://skillicons.dev/icons?i=java,spring,maven,gradle)](https://skillicons.dev)
 
-- **Linguagem:** Java 17+
+- **Linguagem:** Java 21+
 - **Framework de IA:** [Spring AI](https://spring.io/projects/spring-ai)
 - **Modelo de IA:** [Ollama](https://ollama.com/) (CPU), modelo aberto básico
 - **Interface do modelo (auxiliar):** [Jan.ai](https://jan.ai/) (Jan4)

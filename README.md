@@ -88,32 +88,54 @@ Referência dos padrões utilizados como base conceitual: [Spring AI — Design 
 
 - **Linguagem:** Java 21+
 - **Framework de IA:** [Spring AI](https://spring.io/projects/spring-ai)
-- **Modelo de IA:** [Ollama](https://ollama.com/) (CPU), modelo aberto básico
-- **Interface do modelo (auxiliar):** [Jan.ai](https://jan.ai/) (Jan4)
+- **Modelo de chat:** [Jan.ai](https://jan.ai/) via API local OpenAI-compatible
+- **Modelo de embeddings:** [Ollama](https://ollama.com/) (`nomic-embed-text`)
 - **Interface gráfica:** Java AWT / Swing
-- **Banco de Dados Vetorial:** *em avaliação* (ex: Chroma, Weaviate, PGVector — a definir conforme pesquisa do grupo)
-- **Build:** Maven/Gradle *(definir conforme o setup do projeto)*
+- **Banco de Dados Vetorial:** ChromaDB
+- **Build:** Maven Wrapper
 
 <br>
 
 ## ![](https://img.shields.io/badge/-%20-a855f7?style=for-the-badge) Como Executar
 
+### Requisitos
+
+- Java JDK 21
+- Docker com suporte ao Docker Compose
+- Ollama instalado para gerar embeddings
+- Jan instalado com um modelo de chat baixado e o Local API Server iniciado em `http://127.0.0.1:1337`
+
+O projeto usa Jan para o chat e Ollama (`nomic-embed-text`) para os embeddings. São serviços separados. O identificador do modelo do Jan precisa corresponder a `spring.ai.openai.chat.model` em `ia/src/main/resources/application.properties` (valor atual: `gemma-4-E4B-it-qat-UD-Q4_K_XL`). Confira o ID servido pelo Jan em `http://127.0.0.1:1337/v1/models` e ajuste a propriedade se necessário.
+
+### Windows (PowerShell)
+
+1. Instale o [Java JDK 21](https://adoptium.net/temurin/releases/?version=21), o [Docker Desktop](https://docs.docker.com/desktop/setup/install/windows-install/) e o [Ollama para Windows](https://ollama.com/download/windows). Inicie o Docker Desktop e aguarde ele ficar pronto.
+2. Em um PowerShell, baixe o modelo de embeddings:
+
+   ```powershell
+   ollama pull nomic-embed-text
+   ```
+
+3. No Jan, baixe um modelo de chat, selecione-o para o Local API Server e inicie o servidor. Por padrão, ele usa `http://127.0.0.1:1337`.
+4. No PowerShell, a partir da pasta do repositório:
+
+   ```powershell
+   cd .\ia
+   docker compose up --detach chroma
+   .\mvnw.cmd spring-boot:run
+   ```
+
+### Linux/macOS
+
 ```bash
-# 1. Clone o repositório
 git clone <url-do-repositorio>
-cd <nome-do-repositorio>
-
-# 2. Suba o modelo local via Ollama
-ollama pull <nome-do-modelo>
-ollama serve
-
-# 3. Compile e execute a aplicação
-./mvnw spring-boot:run
-# ou
-./gradlew bootRun
+cd <nome-do-repositorio>/ia
+ollama pull nomic-embed-text
+docker compose up --detach chroma
+bash mvnw spring-boot:run
 ```
 
-> Instruções detalhadas de configuração do Ollama, do banco vetorial e da GUI serão atualizadas conforme o avanço do desenvolvimento.
+Na inicialização, os arquivos `.md` e `.txt` de `ia/knowledge` são divididos em trechos e indexados na coleção `knowledge-assistant`. O ChromaDB persiste os dados no volume `chroma_data`. Os endereços dos serviços podem ser ajustados por `CHROMA_HOST`, `CHROMA_PORT` e `OLLAMA_BASE_URL`.
 
 <br>
 

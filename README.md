@@ -139,6 +139,17 @@ Na inicialização, os arquivos `.md` e `.txt` de `ia/knowledge` são divididos 
 
 <br>
 
+# Banco de dados vetorial
+
+Para visualizar o banco de dados vetorial, acesse "https://github.com/BlackyDrum/chromadb-ui/tree/main" e siga as instruções do repositório. 
+
+### Server URL:
+http://localhost:8000
+### Tenant: 
+SpringAiTenant
+### Database:
+SpringAiDatabase
+
 ## ![](https://img.shields.io/badge/-%20-a855f7?style=for-the-badge) Entregas
 
 | Entrega | Data | Expectativa |

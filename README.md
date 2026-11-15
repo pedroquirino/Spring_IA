@@ -80,8 +80,350 @@ Referência dos padrões utilizados como base conceitual: [Spring AI — Design 
 
 > Os diagramas UML detalhados (classes, sequência e/ou estados) estão disponíveis na pasta [`/docs/uml`](./docs/uml), evidenciando onde cada padrão se encontra na arquitetura do código Java.
 
+### Diagramas UML
+
 <br>
 
+## ![](https://img.shields.io/badge/-%20-a855f7?style=for-the-badge) Diagramas UML
+
+Os diagramas de classes ficam em [`ia/uml`](./ia/uml) e mostram onde cada padrão se encontra no código Java. Clique em cada um para expandir.
+
+<details>
+<summary><b>Visão geral</b> — arquitetura completa, por padrão</summary>
+<br>
+
+```
+  ┌───────────────────────────────────────────────────────────────────────┐
+  │                            ui  (Composite)                            │
+  ├───────────────────────────────────────────────────────────────────────┤
+  │ ChatFrame, PainelChat, PainelEntrada                                  │
+  │ ComponenteChat, PainelMensagens                                       │
+  │ BolhaMensagem, IndicadorDigitando                                     │
+  └───────────────────────────────────────────────────────────────────────┘
+                                      │ usa
+                                      │
+                                      ▼
+  ┌───────────────────────────────────────────────────────────────────────┐
+  │                            service / memory                           │
+  ├───────────────────────────────────────────────────────────────────────┤
+  │ AgentService, ConversationMemory                                      │
+  └───────────────────────────────────────────────────────────────────────┘
+                                      │ cria o AgentContext e inicia o ciclo
+                                      │
+                                      ▼
+  ┌───────────────────────────────────────────────────────────────────────┐
+  │                             state  (State)                            │
+  ├───────────────────────────────────────────────────────────────────────┤
+  │ AgentContext  ▶  AgentState                                           │
+  │ PlanningState ─▶ ResearchState ─▶ ExecutingState ─▶ FinalState        │
+  └───────────────────────────────────────────────────────────────────────┘
+                    │                                     │
+                    │ PlanningState                       │ ResearchState
+                    ▼                                     ▼
+  ┌─────────────────────────────────┐   ┌─────────────────────────────────┐
+  │       strategy  (Strategy)      │   │        command  (Command)       │
+  ├─────────────────────────────────┤   ├─────────────────────────────────┤
+  │ PlanningStrategy                │   │ CommandInvoker, Command         │
+  │ ReActPlanner                    │   │ SearchKnowledgeCommand          │
+  │ PlanThenExecutePlanner          │   │ ListDocumentsCommand            │
+  └─────────────────────────────────┘   └─────────────────────────────────┘
+                                                          │
+                                                          │ receiver
+                                                          ▼
+                                        ┌─────────────────────────────────┐
+                                        │      knowledge  (Receivers)     │
+                                        ├─────────────────────────────────┤
+                                        │ KnowledgeBase                   │
+                                        │ VectorKnowledgeBase             │
+                                        └─────────────────────────────────┘
+
+  ┌───────────────────────────────────────────────────────────────────────┐
+  │                          observer  (Observer)                         │
+  ├───────────────────────────────────────────────────────────────────────┤
+  │ AgentEventPublisher, AgentObserver, AgentEvent                        │
+  │ ConsoleLogObserver  |  PainelChat (lambda)                            │
+  └───────────────────────────────────────────────────────────────────────┘
+  Publicam eventos: AgentContext, CommandInvoker e AgentService.
+  Observam: ConsoleLogObserver (console) e PainelChat (status na tela).
+```
+
+[Ver código PlantUML](ia/uml/general.puml)
+
+</details>
+
+<details>
+<summary><b>State</b> — ciclo de vida do agente</summary>
+<br>
+
+```
+                ┌────────────────────────────────────────────┐
+                │                 «Context»                  │
+                │                AgentContext                │
+                ├────────────────────────────────────────────┤
+                │ - state: AgentState                        │
+                │ + run()                                    │
+                │ + setState(state)                          │
+                └────────────────────────────────────────────┘
+                                       │
+                                       │ state atual
+                                       │
+                                       ▼
+                ┌────────────────────────────────────────────┐
+                │            «interface» «State»             │
+                │                 AgentState                 │
+                ├────────────────────────────────────────────┤
+                │ + handle(context)                          │
+                │ + name(): String                           │
+                │ + isFinal(): boolean                       │
+                └────────────────────────────────────────────┘
+                                       ▲ implementa
+         ┌───────────────────┬─────────┴─────────┬───────────────────┐
+         │                   │                   │                   │
+┌────────────────┐  ┌────────────────┐  ┌────────────────┐  ┌────────────────┐
+│«ConcreteState» │  │«ConcreteState» │  │«ConcreteState» │  │«ConcreteState» │
+│ PlanningState  │─>│ ResearchState  │─>│ ExecutingState │─>│   FinalState   │
+├────────────────┤  ├────────────────┤  ├────────────────┤  ├────────────────┤
+│ + handle(ctx)  │  │ + handle(ctx)  │  │ + handle(ctx)  │  │ + handle(ctx)  │
+└────────────────┘  └────────────────┘  └────────────────┘  └────────────────┘
+─▶  next: cada estado escolhe o próximo com context.setState(next)
+AgentContext.run() repete state.handle(this) até isFinal() ser verdadeiro
+```
+
+[Ver código PlantUML](ia/uml/state.puml)
+
+</details>
+
+<details>
+<summary><b>Strategy</b> — estratégias de planejamento</summary>
+<br>
+
+```
+                      ┌────────────────────────────────┐
+                      │     PainelChat (JComboBox)     │
+                      └────────────────────────────────┘
+                                       │
+                                       │ usePlanner(nome)
+                                       │
+                                       ▼
+               ┌──────────────────────────────────────────────┐
+               │                   «Client»                   │
+               │                 AgentService                 │
+               ├──────────────────────────────────────────────┤
+               │ - planners: Map<String, PlanningStrategy>    │
+               │ + usePlanner(name)                           │
+               │ + currentPlanner()                           │
+               └──────────────────────────────────────────────┘
+                                       │
+                                       │ troca a strategy
+                                       │
+                                       ▼
+               ┌──────────────────────────────────────────────┐
+               │                  «Context»                   │
+               │                PlanningState                 │
+               ├──────────────────────────────────────────────┤
+               │ - strategy: PlanningStrategy                 │
+               │ + setStrategy(strategy)                      │
+               │ + handle(context)                            │
+               └──────────────────────────────────────────────┘
+                                       │
+                                       │ strategy
+                                       │
+                                       ▼
+               ┌──────────────────────────────────────────────┐
+               │            «interface» «Strategy»            │
+               │               PlanningStrategy               │
+               ├──────────────────────────────────────────────┤
+               │ + name(): String                             │
+               │ + createPlan(userMessage): String            │
+               └──────────────────────────────────────────────┘
+                                       ▲ implementa
+                     ┌─────────────────┴──────────────────┐
+                     │                                    │
+     ┌───────────────────────────────┐    ┌───────────────────────────────┐
+     │       «ConcreteStrategy»      │    │       «ConcreteStrategy»      │
+     │          ReActPlanner         │    │     PlanThenExecutePlanner    │
+     ├───────────────────────────────┤    ├───────────────────────────────┤
+     │ + createPlan(userMessage)     │    │ + createPlan(userMessage)     │
+     └───────────────────────────────┘    └───────────────────────────────┘
+
+Estratégia inicial: ReActPlanner (@Primary).
+A troca acontece em tempo de execução, pelo JComboBox do PainelChat.
+```
+
+[Ver código PlantUML](ia/uml/strategy.puml)
+
+</details>
+
+<details>
+<summary><b>Command</b> — execução das buscas na base de conhecimento</summary>
+<br>
+
+```
+                     ┌──────────────────────────────────┐
+                     │             «Client»             │
+                     │          ResearchState           │
+                     ├──────────────────────────────────┤
+                     │ + handle(context)                │
+                     └──────────────────────────────────┘
+                                       │
+                                       │ run(command)
+                                       │
+                                       ▼
+                     ┌──────────────────────────────────┐
+                     │            «Invoker»             │
+                     │          CommandInvoker          │
+                     ├──────────────────────────────────┤
+                     │ + run(command): CommandResult    │
+                     └──────────────────────────────────┘
+                                       │
+                                       │ execute()
+                                       │
+                                       ▼
+                     ┌──────────────────────────────────┐
+                     │      «interface» «Command»       │
+                     │             Command              │
+                     ├──────────────────────────────────┤
+                     │ + name(): String                 │
+                     │ + execute(): CommandResult       │
+                     └──────────────────────────────────┘
+                                       ▲ implementa
+                     ┌─────────────────┴──────────────────┐
+                     │                                    │
+     ┌───────────────────────────────┐    ┌───────────────────────────────┐
+     │       «ConcreteCommand»       │    │       «ConcreteCommand»       │
+     │     SearchKnowledgeCommand    │    │      ListDocumentsCommand     │
+     ├───────────────────────────────┤    ├───────────────────────────────┤
+     │ - termo: String               │    │ + execute(): CommandResult    │
+     │ + execute(): CommandResult    │    └───────────────────────────────┘
+     └───────────────────────────────┘
+                     │                                    │
+                     │ receiver                           │ receiver
+                     │                                    │
+                     ▼                                    ▼
+     ┌───────────────────────────────┐    ┌───────────────────────────────┐
+     │           «Receiver»          │    │           «Receiver»          │
+     │      VectorKnowledgeBase      │    │         KnowledgeBase         │
+     ├───────────────────────────────┤    ├───────────────────────────────┤
+     │ + buscar(consulta)            │    │ + listarDocumentos()          │
+     └───────────────────────────────┘    │ + catalogo()                  │
+                                          └───────────────────────────────┘
+
+ResearchState cria os dois comandos e os entrega ao CommandInvoker.
+execute() devolve um CommandResult (success, output).
+Atalho: para perguntas sobre a própria base, chama KnowledgeBase.catalogo() direto.
+```
+
+[Ver código PlantUML](ia/uml/command.puml)
+
+</details>
+
+<details>
+<summary><b>Observer</b> — monitoramento da execução</summary>
+<br>
+
+```
+┌──────────────────────┐   ┌──────────────────────┐   ┌──────────────────────┐
+│   «emite eventos»    │   │   «emite eventos»    │   │   «emite eventos»    │
+│     AgentContext     │   │    CommandInvoker    │   │     AgentService     │
+├──────────────────────┤   ├──────────────────────┤   ├──────────────────────┤
+│ evento: STATE_CHANGED│   │ evento: COMMAND_*    │   │ evento: ERROR        │
+└──────────────────────┘   └──────────────────────┘   └──────────────────────┘
+            │                          │                          │
+            └──────────────────────────┼──────────────────────────┘
+                                       │ publish(event)
+                                       ▼
+                ┌────────────────────────────────────────────┐
+                │                «Publisher»                 │
+                │            AgentEventPublisher             │
+                ├────────────────────────────────────────────┤
+                │ - observers: List<AgentObserver>           │
+                │ + attach(observer)                         │
+                │ + detach(observer)                         │
+                │ + publish(event)                           │
+                └────────────────────────────────────────────┘
+                                       │
+                                       │ notifica
+                                       │
+                                       ▼
+                ┌────────────────────────────────────────────┐
+                │          «interface» «Subscriber»          │
+                │               AgentObserver                │
+                ├────────────────────────────────────────────┤
+                │ + onEvent(event)                           │
+                └────────────────────────────────────────────┘
+                                       ▲ implementa
+                   ┌───────────────────┴───────────────────┐
+                   │                                       │
+ ┌──────────────────────────────────┐    ┌──────────────────────────────────┐
+ │       «ConcreteSubscriber»       │    │       «ConcreteSubscriber»       │
+ │        ConsoleLogObserver        │    │            PainelChat            │
+ ├──────────────────────────────────┤    ├──────────────────────────────────┤
+ │ + onEvent(event)                 │    │ (lambda) atualiza o status       │
+ │ registra: attach(this)           │    │ registra: service.addObserver()  │
+ └──────────────────────────────────┘    └──────────────────────────────────┘
+
+        ┌────────────────────────────────────────────────────────────┐
+        │                          «record»                          │
+        │                         AgentEvent                         │
+        ├────────────────────────────────────────────────────────────┤
+        │ type: Type  |  message: String                             │
+        │ Type: STATE_CHANGED, COMMAND_STARTED, COMMAND_FINISHED,    │
+        │       COMMAND_FAILED, ERROR                                │
+        └────────────────────────────────────────────────────────────┘
+AgentEvent é o dado que o Publisher entrega a cada Subscriber.
+```
+
+[Ver código PlantUML](ia/uml/observer.puml)
+
+</details>
+
+<details>
+<summary><b>Composite</b> — interface gráfica (Java Swing)</summary>
+<br>
+
+```
+                  ┌────────────────────────────────────────┐
+                  │        «interface» «Component»         │
+                  │             ComponenteChat             │
+                  ├────────────────────────────────────────┤
+                  │ + getView(): JComponent                │
+                  │ + getTexto(): String                   │
+                  │ + adicionar(filho)                     │
+                  │ + remover(filho)                       │
+                  └────────────────────────────────────────┘
+                                       ▲ implementa
+             ┌─────────────────────────┼─────────────────────────┐
+             │                         │                         │
+ ┌───────────────────────┐ ┌───────────────────────┐ ┌───────────────────────┐
+ │         «Leaf»        │ │         «Leaf»        │ │      «Composite»      │
+ │     BolhaMensagem     │ │   IndicadorDigitando  │ │    PainelMensagens    │
+ ├───────────────────────┤ ├───────────────────────┤ ├───────────────────────┤
+ │ - texto: String       │ │ + iniciar()           │ │ - filhos:             │
+ │ - doUsuario: boolean  │ │ + parar(): long       │ │   List<ComponenteChat>│
+ │ + getView()           │ │ + getView()           │ │ + adicionar(filho)    │
+ │ + getTexto()          │ │ + getTexto()          │ │ + remover(filho)      │
+ │                       │ │                       │ │ + getTexto()          │
+ └───────────────────────┘ └───────────────────────┘ └───────────────────────┘
+                                                                 ▲
+                                                                 │ mensagens (composição)
+                                                                 │
+                                                 ┌──────────────────────────────┐
+                                                 │           «Client»           │
+                                                 │          PainelChat          │
+                                                 ├──────────────────────────────┤
+                                                 │ - mensagens: PainelMensagens │
+                                                 └──────────────────────────────┘
+
+PainelMensagens ──▶ ComponenteChat (0..*): agrega filhos e os trata igual.
+getTexto() percorre os filhos e junta o texto (botão "Copiar conversa").
+As três classes também estendem JPanel (Swing).
+```
+
+[Ver código PlantUML](ia/uml/composite.puml)
+
+</details>
+
+<br>
 ## ![](https://img.shields.io/badge/-%20-a855f7?style=for-the-badge) Stack Tecnológica
 
 [![My Skills](https://skillicons.dev/icons?i=java,spring,maven,gradle)](https://skillicons.dev)

@@ -77,11 +77,6 @@ Referência dos padrões utilizados como base conceitual: [Spring AI — Design 
 │        Valida sucesso/falha e notifica interessados     │
 └─────────────────────────────────────────────────────────┘
 ```
-
-> Os diagramas UML detalhados (classes, sequência e/ou estados) estão disponíveis na pasta [`/docs/uml`](./docs/uml), evidenciando onde cada padrão se encontra na arquitetura do código Java.
-
-### Diagramas UML
-
 <br>
 
 ## ![](https://img.shields.io/badge/-%20-a855f7?style=for-the-badge) Diagramas UML
